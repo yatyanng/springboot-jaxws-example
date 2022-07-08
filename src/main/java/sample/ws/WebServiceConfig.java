@@ -15,7 +15,7 @@ import org.apache.cxf.metrics.MetricsProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import sample.ws.service.HelloPortImpl;
+import sample.ws.service.Hello;
 
 @Configuration
 public class WebServiceConfig {
@@ -25,6 +25,9 @@ public class WebServiceConfig {
 
   @Autowired
   private MetricsProvider metricsProvider;
+  
+  @Autowired
+  private Hello helloImplementation;
 
   @Bean
   public Endpoint endpoint() {
@@ -34,7 +37,7 @@ public class WebServiceConfig {
     loggingFeature.setVerbose(true);
     loggingFeature.setLogMultipart(true);
 
-    EndpointImpl endpoint = new EndpointImpl(bus, new HelloPortImpl(), null, null,
+    EndpointImpl endpoint = new EndpointImpl(bus, helloImplementation, null, null,
         new WebServiceFeature[] {loggingFeature, new MetricsFeature(metricsProvider)});
     endpoint.publish("/HelloPort");
     return endpoint;
